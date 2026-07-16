@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content="XinovaSU 使用文档：基于 KernelSU 官方文档整理的安装、授权、模块和恢复指南。" />
+    <title>XinovaSU 使用文档 — 内核级 Android Root</title>
+    <link rel="stylesheet" href="./src/styles/tokens.css" />
+    <link rel="stylesheet" href="./src/styles/base.css" />
+    <link rel="stylesheet" href="./src/styles/layout.css" />
+    <link rel="stylesheet" href="./src/styles/components.css" />
+    <link rel="stylesheet" href="./src/styles/docs.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#guide">跳至正文</a>
+    <header class="site-header docs-header">
+      <nav class="nav page-shell" aria-label="文档导航">
+        <a class="brand" href="./index.html" aria-label="返回 XinovaSU 首页"><img src="./src/assets/xos-mark.svg" alt="XOS" /><span>XinovaSU</span></a>
+        <a class="docs-back" href="./index.html">返回首页 ←</a>
+      </nav>
+    </header>
+    <main id="guide">
+      <section class="docs-hero page-shell" aria-labelledby="guide-title">
+        <p class="eyebrow">OFFICIAL GUIDE · SIMPLIFIED</p>
+        <h1 id="guide-title">使用文档</h1>
+        <p>面向 XinovaSU 的中文入门路线。本文按 KernelSU 官方使用文档整理，并保留关键风险提示与官方原文入口；不同设备的分区、KMI 与刷写方式并不相同，请勿跳过准备步骤。</p>
+      </section>
+      <div class="docs-layout page-shell">
+        <nav class="docs-toc" aria-label="目录"><a href="#before">01 准备</a><a href="#install">02 安装</a><a href="#manager">03 管理</a><a href="#modules">04 模块</a><a href="#ota">05 更新</a><a href="#rescue">06 恢复</a><a href="#sources">官方来源</a></nav>
+        <article class="docs-content">
+          <aside class="docs-alert" aria-label="风险提示"><p><strong>先备份，再刷写。</strong>解锁 Bootloader、刷写启动镜像与安装 root 模块都可能造成数据丢失或无法启动。保留与当前固件完全对应的原厂 <code>boot.img</code> 或 <code>init_boot.img</code>，以及可用的恢复路径。</p></aside>
+          <section id="before" aria-labelledby="before-title"><p class="section-index">01 / BEFORE YOU START</p><h2 id="before-title">安装前，请先确认这四件事</h2><div class="docs-card-grid"><div class="docs-card"><h3>Bootloader 已解锁</h3><p>官方文档明确要求设备能够解锁 Bootloader；无法解锁时，不应继续进行刷写流程。</p></div><div class="docs-card"><h3>管理器状态</h3><p>安装并打开管理器。显示“未安装”表示可继续判断安装方式；显示“不支持”则通常需要自行编译并集成内核。</p></div><div class="docs-card"><h3>KMI 与安全补丁</h3><p>刷写选择以设备内核 KMI 和安全补丁级别为准，不要把 Android 系统版本直接当作内核版本。</p></div><div class="docs-card"><h3>原厂镜像备份</h3><p>保存当前固件对应的原厂启动镜像。它是刷入错误镜像后最直接的恢复材料。</p></div></div></section>
+          <section id="install" aria-labelledby="install-title"><p class="section-index">02 / INSTALLATION</p><h2 id="install-title">选择正确的安装路径</h2><p>KernelSU 官方将 GKI 与 LKM 作为两种不同工作模式。XinovaSU 的发布内容以实际 Release 说明为准；本页不替代机型专属教程。</p><ol class="docs-steps"><li><h3>确认设备与 Release 匹配</h3><p>先检查设备的 KMI、镜像压缩格式与安全补丁级别，再选用对应版本。镜像不匹配可能导致无法开机。</p></li><li><h3>优先选择适合的模式</h3><p>官方文档建议手机优先考虑 LKM；GKI 会替换内核，LKM 则以可加载模块方式工作。设备或固件的限制可能改变这个选择。</p></li><li><h3>由管理器修补或安装</h3><p>无 root 时使用“选择并修补一个文件”，并只选择当前固件对应的启动镜像；已有 root 时再考虑“直接安装”。Android 13 出厂设备在 LKM 模式下可能操作 <code>init_boot</code> 而不是 <code>boot</code>。</p></li><li><h3>按机型专属方式刷入</h3><p>仅将已修补的镜像刷入管理器或机型文档明确指定的分区。不要把其他设备的命令、分区名或镜像照搬到本机。</p></li><li><h3>重启并在管理器确认</h3><p>首次启动后，确认管理器能够识别内核状态，再向需要的应用逐项授予 root。</p></li></ol></section>
+          <section id="manager" aria-labelledby="manager-title"><p class="section-index">03 / MANAGER</p><h2 id="manager-title">把 root 授权收窄到需要的应用</h2><p>在管理器中按应用授权，避免为未知来源或不需要 root 的应用开启权限。KernelSU 的 App Profile 可针对获得 <code>su</code> 的应用限制 UID、GID、附加组、Capabilities 与 SELinux 规则；这是控制 root 进程权限，而不是替代 Android 应用自身权限管理。</p></section>
+          <section id="modules" aria-labelledby="modules-title"><p class="section-index">04 / MODULES</p><h2 id="modules-title">模块只从可信来源安装</h2><p>KernelSU 模块通过管理器安装 ZIP 包。安装后重启并观察启动与基本功能；若模块要求修改 <code>/system</code>，官方资料说明还需要相应的 metamodule 支持。不要在 Recovery 中安装 KernelSU 模块 ZIP，也不要安装来路不明的模块。</p></section>
+          <section id="ota" aria-labelledby="ota-title"><p class="section-index">05 / OTA &amp; UPDATES</p><h2 id="ota-title">更新前先让系统回到稳定状态</h2><p>在系统 OTA 或更新 XinovaSU 前，先禁用问题模块并确认当前设备可正常启动。对 A/B 设备，官方资料提供“安装到另一个分区”的流程；是否适用取决于设备与当前安装模式。更新后先验证管理器、root 授权和常用功能，再恢复模块。</p></section>
+          <section id="rescue" aria-labelledby="rescue-title"><p class="section-index">06 / RECOVERY</p><h2 id="rescue-title">无法启动时的恢复顺序</h2><ol class="docs-steps"><li><h3>强制重启一次</h3><p>若刚更新或安装模块后无法启动，官方救砖文档说明模块 AB 更新机制可能在重启后回滚并禁用本次问题模块。</p></li><li><h3>进入安全模式</h3><p>可使用系统自带安全模式；KernelSU 内置安全模式的触发方式是开机第一屏后连续按音量下键超过三次。进入后卸载问题模块。</p></li><li><h3>刷回原厂启动镜像</h3><p>因错误 boot 镜像、压缩格式不匹配或内核不适配而无法启动时，按设备文档刷回此前备份的原厂镜像。</p></li><li><h3>必要时恢复完整官方系统</h3><p>若无法通过以上路径恢复，使用设备官方的完整固件恢复流程或联系售后。不要继续反复刷写未知镜像。</p></li></ol></section>
+          <section id="sources" aria-labelledby="sources-title"><p class="section-index">OFFICIAL SOURCES</p><h2 id="sources-title">继续阅读官方资料</h2><div class="docs-source-list"><a href="https://kernelsu.org/guide/installation.html" target="_blank" rel="noreferrer">KernelSU 官方安装指南 <span>安装模式、KMI、镜像与刷写</span></a><a href="https://kernelsu.org/guide/app-profile.html" target="_blank" rel="noreferrer">KernelSU App Profile <span>细粒度 root 配置</span></a><a href="https://kernelsu.org/guide/module.html" target="_blank" rel="noreferrer">KernelSU 模块说明 <span>模块安装与 systemless 行为</span></a><a href="https://kernelsu.org/guide/rescue-from-bootloop.html" target="_blank" rel="noreferrer">KernelSU 救砖指南 <span>启动失败与模块恢复</span></a></div></section>
+        </article>
+      </div>
+    </main>
+    <footer class="footer docs-footer page-shell"><img src="./src/assets/xos-mark.svg" alt="XOS" /><p>XinovaSU 基于 KernelSU（tiann/KernelSU）开发，遵循 GPL 协议开源。</p><div><a href="./index.html">首页</a><a href="https://github.com/kusesad-1122/XinovaSU" target="_blank" rel="noreferrer">GitHub</a><a href="https://github.com/kusesad-1122/XinovaSU/releases/latest" target="_blank" rel="noreferrer">下载最新版</a></div><small>© XinovaSU</small></footer>
+  </body>
+</html>

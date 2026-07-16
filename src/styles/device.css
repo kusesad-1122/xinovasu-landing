@@ -4,33 +4,31 @@
   place-items: center;
   overflow: hidden;
   isolation: isolate;
-  background-color: #fff;
-  background-image: none;
+  background: #fff;
 }
 
-.product-stage::before {
-  content: "";
+.ground-grid {
   position: absolute;
-  z-index: -1;
-  width: 130%;
-  height: 60%;
-  bottom: -12%;
-  left: -15%;
+  z-index: 0;
+  width: 142%;
+  height: 29%;
+  bottom: -5%;
+  left: -21%;
   background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
   background-size: 42px 42px;
-  transform: perspective(700px) rotateX(63deg);
+  transform: perspective(760px) rotateX(63deg);
   transform-origin: center bottom;
-  opacity: .9;
+  opacity: .82;
   animation: grid-drift 9s ease-in-out infinite;
 }
 
 .product-stage::after {
   content: "";
   position: absolute;
-  z-index: -1;
+  z-index: 0;
   width: 54%;
   aspect-ratio: 1.7;
-  bottom: 10%;
+  bottom: 15%;
   border-radius: 50%;
   background: radial-gradient(ellipse, #10111426 0%, #10111410 43%, transparent 72%);
   filter: blur(13px);
@@ -67,34 +65,10 @@
   text-shadow: 0 1px 0 #ffffffcc;
 }
 
-.device-mark b {
-  font: 700 clamp(12px, 1.45vw, 22px)/1 var(--sans);
-  letter-spacing: -.055em;
-}
+.device-mark b { font: 700 clamp(12px, 1.45vw, 22px)/1 var(--sans); letter-spacing: -.055em; }
+.device-mark span { font: 600 clamp(6px, .53vw, 9px)/1 var(--mono); letter-spacing: .12em; color: #656b75; }
 
-.device-mark span {
-  font: 600 clamp(6px, .53vw, 9px)/1 var(--mono);
-  letter-spacing: .12em;
-  color: #656b75;
-}
-
-@keyframes grid-drift {
-  0%, 100% { background-position: 0 0, 0 0; }
-  50% { background-position: 0 7px, 7px 0; }
-}
-
-@media (hover: hover) and (min-width: 1024px) {
-  .product-stage:hover .reference-device {
-    transform: rotate(-.5deg) scale(1.012);
-  }
-}
-
-@media (max-width: 1023px) {
-  .product-stage { min-height: 330px; }
-  .reference-device { width: 130%; margin-left: -15%; }
-  .device-mark { left: 45.5%; top: 26.5%; width: 25%; }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .product-stage::before { animation: none; }
-}
+@keyframes grid-drift { 0%,100% { background-position:0 0,0 0; } 50% { background-position:0 7px,7px 0; } }
+@media (hover:hover) and (min-width:1024px) { .product-stage:hover .reference-device { transform:rotate(-.5deg) scale(1.012); } }
+@media (max-width:1023px) { .product-stage { min-height:330px; } .reference-device { width:130%; margin-left:-15%; } .ground-grid { width:130%; left:-15%; height:24%; bottom:-2%; } .device-mark { left:45.5%; top:26.5%; width:25%; } }
+@media (prefers-reduced-motion:reduce) { .ground-grid { animation:none; } }

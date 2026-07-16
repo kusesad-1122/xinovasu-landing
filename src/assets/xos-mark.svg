@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 92 32" role="img" aria-label="XOS">
+  <path fill="currentColor" d="M2 4h10l8 9 8-9h10L25 16l13 12H28l-8-8-8 8H2l13-12z"/>
+  <path fill="currentColor" fill-rule="evenodd" d="M42 4h15a9 9 0 0 1 9 9v6a9 9 0 0 1-9 9H42a9 9 0 0 1-9-9v-6a9 9 0 0 1 9-9Zm1 6a4 4 0 0 0-4 4v4a4 4 0 0 0 4 4h13a4 4 0 0 0 4-4v-4a4 4 0 0 0-4-4H43Z"/>
+  <path fill="currentColor" d="M70 4h18v6H76v3h9a5 5 0 0 1 5 5v5a5 5 0 0 1-5 5H68v-6h12v-3h-8a5 5 0 0 1-5-5v-5a5 5 0 0 1 5-5Z"/>
+</svg>
