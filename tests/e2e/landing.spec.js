@@ -17,3 +17,15 @@ test('contains all five approved features and public CTAs', async ({ page }) => 
   await expect(page.getByRole('link', { name: 'GitHub' }).first())
     .toHaveAttribute('href', 'https://github.com/kusesad-1122/XinovaSU');
 });
+
+test('has distinct desktop and mobile compositions without horizontal overflow', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/');
+  await expect(page.locator('.hero-copy')).toBeVisible();
+  await expect(page.locator('.phone-stage')).toBeVisible();
+  await expect(page.locator('.capability')).toHaveCount(4);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await expect(page.locator('#mobile-menu-button')).toBeVisible();
+  expect(await page.locator('body').evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
+});
