@@ -29,3 +29,11 @@ test('has distinct desktop and mobile compositions without horizontal overflow',
   await expect(page.locator('#mobile-menu-button')).toBeVisible();
   expect(await page.locator('body').evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
 });
+
+test('renders independently addressable phone layers and disables automatic motion when requested', async ({ page }) => {
+  await page.goto('/');
+  await expect(page.locator('.phone-stage .module-panel')).toHaveCount(3);
+  await expect(page.locator('.kernel-node')).toBeVisible();
+  await page.emulateMedia({ reducedMotion: 'reduce' });
+  await expect(page.locator('.phone-stage')).toHaveCSS('animation-name', 'none');
+});
