@@ -5,8 +5,16 @@
 }
 
 .technology li::before {
+  content: none;
   grid-column: 1;
   grid-row: 1;
+}
+
+.technology li > .technology-index {
+  grid-column: 1;
+  grid-row: 1;
+  color: var(--accent);
+  font: 13px var(--mono);
 }
 
 .technology li > b {

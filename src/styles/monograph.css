@@ -17,7 +17,7 @@
   margin: 0 0 .4em;
   font-size: clamp(4.2rem, 8vw, 8.5rem);
   line-height: .88;
-  letter-spacing: -.075em;
+  letter-spacing: -.04em;
 }
 .monograph-copy h2 { max-width: 620px; margin-bottom: .72em; font-size: clamp(1.65rem, 2.45vw, 3rem); }
 .monograph-copy .lead { max-width: 520px; margin-bottom: 30px; }

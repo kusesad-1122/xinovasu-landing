@@ -36,10 +36,17 @@ test('has distinct desktop and mobile compositions without horizontal overflow',
   await expect(page.locator('.feature-row').first().locator('div').evaluate((element) => element.getBoundingClientRect().width)).resolves.toBeGreaterThanOrEqual(220);
   const technologyItem = page.locator('.technology li').first();
   const technologyLayout = await technologyItem.evaluate((item) => {
+    const index = item.querySelector('.technology-index').getBoundingClientRect();
     const title = item.querySelector('b').getBoundingClientRect();
-    const description = item.querySelector('span').getBoundingClientRect();
-    return { titleLeft: title.left, descriptionLeft: description.left, descriptionWidth: description.width };
+    const description = item.querySelector('span:not(.technology-index)').getBoundingClientRect();
+    return {
+      indexRight: index.right,
+      titleLeft: title.left,
+      descriptionLeft: description.left,
+      descriptionWidth: description.width
+    };
   });
+  expect(technologyLayout.indexRight).toBeLessThanOrEqual(technologyLayout.titleLeft);
   expect(technologyLayout.descriptionLeft).toBeGreaterThanOrEqual(technologyLayout.titleLeft - 1);
   expect(technologyLayout.descriptionWidth).toBeGreaterThanOrEqual(220);
 });
@@ -89,4 +96,45 @@ test('activates a single feature row', async ({ page }) => {
   await page.locator('[data-feature="network"]').click();
   await expect(page.locator('[data-feature="network"]')).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('[data-feature="kernel-mask"]')).toHaveAttribute('aria-expanded', 'false');
+});
+
+test('keeps monograph spacing after the production CSS build', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/xinovasu-landing/');
+
+  const capabilityPadding = await page.locator('.capability').evaluateAll((items) =>
+    items.map((item) => getComputedStyle(item).paddingLeft)
+  );
+
+  expect(capabilityPadding).toEqual(['0px', '0px', '0px', '0px']);
+});
+
+test('keeps the XinovaSU wordmark readable on mobile', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/xinovasu-landing/');
+
+  const titleSpacing = await page.locator('#hero-title').evaluate((title) =>
+    Number.parseFloat(getComputedStyle(title).letterSpacing)
+  );
+
+  expect(titleSpacing).toBeGreaterThan(-4);
+});
+
+test('numbers every engineering highlight from 01 to 04', async ({ page }) => {
+  await page.goto('/xinovasu-landing/');
+
+  await expect(page.locator('.technology-index')).toHaveText(['01', '02', '03', '04']);
+});
+
+test('keeps anchored sections below the sticky header', async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto('/xinovasu-landing/#features');
+  await page.waitForTimeout(600);
+
+  const positions = await page.evaluate(() => ({
+    headerBottom: document.querySelector('.site-header').getBoundingClientRect().bottom,
+    sectionTop: document.querySelector('#features').getBoundingClientRect().top
+  }));
+
+  expect(positions.sectionTop).toBeGreaterThanOrEqual(positions.headerBottom);
 });
