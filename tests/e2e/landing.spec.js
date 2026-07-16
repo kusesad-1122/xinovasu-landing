@@ -23,8 +23,8 @@ test('contains all five approved features and public CTAs', async ({ page }) => 
 test('has distinct desktop and mobile compositions without horizontal overflow', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.goto('/xinovasu-landing/');
-  await expect(page.locator('.hero-copy')).toBeVisible();
-  await expect(page.locator('.phone-stage')).toBeVisible();
+  await expect(page.locator('.monograph-copy')).toBeVisible();
+  await expect(page.locator('.monograph-device')).toBeVisible();
   await expect(page.locator('.capability')).toHaveCount(4);
 
   await page.setViewportSize({ width: 390, height: 844 });
@@ -44,12 +44,31 @@ test('has distinct desktop and mobile compositions without horizontal overflow',
   expect(technologyLayout.descriptionWidth).toBeGreaterThanOrEqual(220);
 });
 
+test('renders the selected monograph hero at desktop and mobile widths', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/xinovasu-landing/');
+  await expect(page.locator('.monograph-hero')).toBeVisible();
+  await expect(page.locator('.monograph-device .reference-device')).toBeVisible();
+  await expect(page.locator('.monograph-notes article')).toHaveCount(4);
+  await expect(page.locator('.monograph-device .ground-grid')).toHaveCount(1);
+  await expect(page.locator('.monograph-device')).toHaveCSS('background-image', 'none');
+  await expect(page.locator('a.button-dark').first()).toHaveAttribute('href', 'https://github.com/kusesad-1122/XinovaSU/releases/latest');
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  const notes = page.locator('.monograph-notes article');
+  await expect(notes).toHaveCount(4);
+  const firstNote = notes.first();
+  const noteWidth = await firstNote.evaluate((element) => element.getBoundingClientRect().width);
+  expect(noteWidth).toBeGreaterThanOrEqual(300);
+  expect(await page.locator('body').evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
+});
+
 test('renders the local layered device visual without a decorative central node', async ({ page }) => {
   await page.goto('/xinovasu-landing/');
-  await expect(page.locator('.phone-stage .reference-device')).toBeVisible();
+  await expect(page.locator('.monograph-device .reference-device')).toBeVisible();
   await expect(page.locator('.kernel-node')).toHaveCount(0);
   await expect(page.locator('.ground-grid')).toHaveCount(1);
-  await expect(page.locator('.phone-stage.product-stage')).toHaveCSS('background-image', 'none');
+  await expect(page.locator('.monograph-device.product-stage')).toHaveCSS('background-image', 'none');
   await expect(page.locator('.brand img')).toHaveAttribute('src', /xos-mark\.svg$|aria-label='XOS'/);
   await expect(page.locator('.brand img')).toHaveAttribute('alt', 'XOS');
   await page.emulateMedia({ reducedMotion: 'reduce' });
