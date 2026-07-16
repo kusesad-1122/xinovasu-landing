@@ -82,6 +82,29 @@ test('renders the local layered device visual without a decorative central node'
   await expect(page.locator('.reference-device')).toHaveCSS('animation-name', 'none');
 });
 
+test('centers the desktop phone visual without clipping one side', async ({ page }) => {
+  await page.setViewportSize({ width: 1440, height: 1000 });
+  await page.goto('/xinovasu-landing/');
+
+  const placement = await page.locator('.monograph-device').evaluate((stage) => {
+    const device = stage.querySelector('.reference-device');
+    const mark = stage.querySelector('.device-mark');
+    const stageRect = stage.getBoundingClientRect();
+    const deviceStyle = getComputedStyle(device);
+    const markRect = mark.getBoundingClientRect();
+    return {
+      widthRatio: device.getBoundingClientRect().width / stageRect.width,
+      marginLeft: Number.parseFloat(deviceStyle.marginLeft),
+      markCenterRatio: (markRect.left + markRect.width / 2 - stageRect.left) / stageRect.width
+    };
+  });
+
+  expect(placement.widthRatio).toBeLessThanOrEqual(1.75);
+  expect(Math.abs(placement.marginLeft)).toBeLessThan(1);
+  expect(placement.markCenterRatio).toBeGreaterThan(0.55);
+  expect(placement.markCenterRatio).toBeLessThan(0.72);
+});
+
 test('provides a dedicated XinovaSU usage guide with official source links', async ({ page }) => {
   await page.goto('/xinovasu-landing/docs.html');
 
