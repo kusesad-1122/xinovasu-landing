@@ -1,0 +1,100 @@
+.product-stage {
+  position: relative;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  isolation: isolate;
+  background-color: #fff;
+  background-image: none;
+}
+
+.product-stage::before {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 130%;
+  height: 60%;
+  bottom: -12%;
+  left: -15%;
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 42px 42px;
+  transform: perspective(700px) rotateX(63deg);
+  transform-origin: center bottom;
+  opacity: .9;
+  animation: grid-drift 9s ease-in-out infinite;
+}
+
+.product-stage::after {
+  content: "";
+  position: absolute;
+  z-index: -1;
+  width: 54%;
+  aspect-ratio: 1.7;
+  bottom: 10%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #10111426 0%, #10111410 43%, transparent 72%);
+  filter: blur(13px);
+}
+
+.reference-device {
+  width: 142%;
+  max-width: none;
+  height: auto;
+  display: block;
+  margin-left: -21%;
+  mix-blend-mode: multiply;
+  filter: contrast(1.035) brightness(1.01);
+  transform-origin: 55% 82%;
+  position: relative;
+  z-index: 1;
+  transition: transform 260ms ease;
+}
+
+.device-mark {
+  position: absolute;
+  z-index: 2;
+  left: 45.5%;
+  top: 26.5%;
+  width: 24%;
+  display: grid;
+  gap: 3px;
+  place-items: center;
+  color: #16181d;
+  line-height: 1;
+  pointer-events: none;
+  transform: translate(-50%, -50%) rotate(13deg) skewX(-4deg);
+  text-align: center;
+  text-shadow: 0 1px 0 #ffffffcc;
+}
+
+.device-mark b {
+  font: 700 clamp(12px, 1.45vw, 22px)/1 var(--sans);
+  letter-spacing: -.055em;
+}
+
+.device-mark span {
+  font: 600 clamp(6px, .53vw, 9px)/1 var(--mono);
+  letter-spacing: .12em;
+  color: #656b75;
+}
+
+@keyframes grid-drift {
+  0%, 100% { background-position: 0 0, 0 0; }
+  50% { background-position: 0 7px, 7px 0; }
+}
+
+@media (hover: hover) and (min-width: 1024px) {
+  .product-stage:hover .reference-device {
+    transform: rotate(-.5deg) scale(1.012);
+  }
+}
+
+@media (max-width: 1023px) {
+  .product-stage { min-height: 330px; }
+  .reference-device { width: 130%; margin-left: -15%; }
+  .device-mark { left: 45.5%; top: 26.5%; width: 25%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-stage::before { animation: none; }
+}

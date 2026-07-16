@@ -27,13 +27,23 @@ test('has distinct desktop and mobile compositions without horizontal overflow',
 
   await page.setViewportSize({ width: 390, height: 844 });
   await expect(page.locator('#mobile-menu-button')).toBeVisible();
+  await page.locator('#mobile-menu-button').click();
+  await expect(page.locator('#mobile-menu-button')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('#mobile-menu')).toBeVisible();
   expect(await page.locator('body').evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
 });
 
-test('renders independently addressable phone layers and disables automatic motion when requested', async ({ page }) => {
+test('renders the local layered device visual without a decorative central node', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('.phone-stage .module-panel')).toHaveCount(3);
-  await expect(page.locator('.kernel-node')).toBeVisible();
+  await expect(page.locator('.phone-stage .reference-device')).toBeVisible();
+  await expect(page.locator('.kernel-node')).toHaveCount(0);
   await page.emulateMedia({ reducedMotion: 'reduce' });
-  await expect(page.locator('.phone-stage')).toHaveCSS('animation-name', 'none');
+  await expect(page.locator('.reference-device')).toHaveCSS('animation-name', 'none');
+});
+
+test('activates a single feature row', async ({ page }) => {
+  await page.goto('/');
+  await page.locator('[data-feature="network"]').click();
+  await expect(page.locator('[data-feature="network"]')).toHaveAttribute('aria-expanded', 'true');
+  await expect(page.locator('[data-feature="kernel-mask"]')).toHaveAttribute('aria-expanded', 'false');
 });
