@@ -4,12 +4,66 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#ffffff" />
+    <meta name="description" content="XinovaSU 是一个基于内核的 Android Root 解决方案。" />
     <title>XinovaSU — 内核级 Android Root</title>
   </head>
   <body>
-    <main aria-label="XinovaSU 产品介绍">
-      <h1>XinovaSU</h1>
+    <a class="skip-link" href="#content">跳至正文</a>
+    <header>
+      <nav aria-label="主导航">
+        <a href="#top" aria-label="XinovaSU 首页"><img src="/src/assets/xs-mark.svg" alt="XS" /> XinovaSU</a>
+        <a href="#capabilities">能力</a>
+        <a href="#features">特性</a>
+        <a href="#technology">技术亮点</a>
+        <a href="https://github.com/kusesad-1122/XinovaSU" target="_blank" rel="noreferrer">GitHub</a>
+        <a href="https://github.com/kusesad-1122/XinovaSU/releases/latest" target="_blank" rel="noreferrer">下载最新版</a>
+      </nav>
+    </header>
+    <main id="content" aria-label="XinovaSU 产品介绍">
+      <section id="top" aria-labelledby="hero-title">
+        <p>XinovaSU</p>
+        <h1 id="hero-title">内核级 Android Root —— 更深、更隐蔽、更可控</h1>
+        <p>在 Linux 内核层授予与管理 root 权限，而非用户态。基于 KernelSU 深度定制，内建一套面向隐蔽与对抗检测的内核功能。</p>
+        <p>
+          <a href="https://github.com/kusesad-1122/XinovaSU/releases/latest" target="_blank" rel="noreferrer">下载最新版</a>
+          <a href="https://github.com/kusesad-1122/XinovaSU" target="_blank" rel="noreferrer">GitHub</a>
+          <a href="https://github.com/kusesad-1122/XinovaSU/tree/main/website/docs" target="_blank" rel="noreferrer">使用文档</a>
+        </p>
+      </section>
+      <section id="about" aria-labelledby="about-title">
+        <h2 id="about-title">什么是 XinovaSU</h2>
+        <p>XinovaSU 是一个基于内核的 Android Root 解决方案，由 KernelSU 二次开发而来。它把 root 的授予、鉴权、模块加载全部下沉到内核层完成——相比传统用户态方案，更难被检测、权限控制更细粒度，并支持 systemless 的模块化系统改造。</p>
+        <p>支持 Android 12 · 5.10 到 Android 16 · 6.12 共 7 个 GKI KMI。</p>
+      </section>
+      <section id="capabilities" aria-labelledby="capabilities-title">
+        <h2 id="capabilities-title">核心能力</h2>
+        <article><h3>内核级 SU 与鉴权</h3><p>root 在内核授予，支持按 App 白名单授权、per-app SELinux 域配置。</p></article>
+        <article><h3>模块系统 + WebUI</h3><p>systemless 修改，兼容主流 KernelSU 模块生态，内置 WebUI 入口。</p></article>
+        <article><h3>挂载控制</h3><p>开机自动挂载模块，并可按 App 卸载指定挂载点。</p></article>
+        <article><h3>全 KMI 覆盖</h3><p>跨 7 个 GKI KMI 构建验证，内核模块（LKM）形态加载。</p></article>
+      </section>
+      <section id="features" aria-labelledby="features-title">
+        <h2 id="features-title">五项功能，留在内核层。</h2>
+        <article><p>01</p><h3>Hide 服务</h3><p>隐藏 Bootloader 解锁 / verified-boot 状态</p><p>把一组 ro.boot.* 属性伪装成“已锁定 / green”，骗过读取属性的软件检测。</p></article>
+        <article><p>02</p><h3>Umount 服务</h3><p>开机自动卸载指定挂载点</p><p>复用内核 try-umount，按 App 生效——被拒的 App 看不到模块挂载。</p></article>
+        <article><p>03</p><h3>内核伪装</h3><p>伪装内核版本与构建时间</p><p>改写 utsname，使 uname、/proc/version、osrelease 一并报告伪装值。</p></article>
+        <article><p>04</p><h3>路径隐藏</h3><p>内核层向指定 App 隐藏文件与目录</p><p>命中路径对目标 App 返回 ENOENT，并从目录枚举 getdents 中抹去名字。</p></article>
+        <article><p>05</p><h3>网络隔离</h3><p>内核层阻止所选 App 联网</p><p>通过 LSM 钩子按 App 拦截外发连接。</p></article>
+      </section>
+      <section id="technology" aria-labelledby="technology-title">
+        <h2 id="technology-title">更靠近内核，更远离检测。</h2>
+        <ul>
+          <li>全部隐藏能力在内核层完成，不依赖易被查杀的用户态特征。</li>
+          <li>LKM 形态，零新增导出符号依赖，跨 7 KMI 编译验证。</li>
+          <li>保留 ksud 兼容层，兼容 ZygiskNext 与主流模块生态。</li>
+          <li>开源，GPL 许可。</li>
+        </ul>
+      </section>
     </main>
+    <footer>
+      <p>XinovaSU 基于 KernelSU（tiann/KernelSU）开发，遵循 GPL 协议开源。</p>
+      <p>© XinovaSU</p>
+    </footer>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
