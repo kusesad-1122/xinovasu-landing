@@ -13,6 +13,6 @@ export default defineConfig({
       ? 'npm.cmd run build && npm.cmd run preview -- --host 127.0.0.1 --port 4173 --strictPort'
       : 'npm.cmd run dev -- --host 127.0.0.1',
     url: isProductionBuild ? 'http://127.0.0.1:4173/xinovasu-landing/' : 'http://127.0.0.1:5173',
-    reuseExistingServer: !process.env.CI
+    reuseExistingServer: !isProductionBuild && !process.env.CI
   }
 });
