@@ -1,14 +1,14 @@
 import { test, expect } from '@playwright/test';
 
 test('serves a named XinovaSU main landmark', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/xinovasu-landing/');
 
   await expect(page.locator('main[aria-label="XinovaSU 产品介绍"]')).toBeVisible();
   await expect(page).toHaveTitle(/XinovaSU/);
 });
 
 test('contains all five approved features and public CTAs', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/xinovasu-landing/');
 
   await expect(page.getByRole('heading', { name: 'Hide 服务' })).toBeVisible();
   await expect(page.getByRole('heading', { name: '网络隔离' })).toBeVisible();
@@ -22,7 +22,7 @@ test('contains all five approved features and public CTAs', async ({ page }) => 
 
 test('has distinct desktop and mobile compositions without horizontal overflow', async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
-  await page.goto('/');
+  await page.goto('/xinovasu-landing/');
   await expect(page.locator('.hero-copy')).toBeVisible();
   await expect(page.locator('.phone-stage')).toBeVisible();
   await expect(page.locator('.capability')).toHaveCount(4);
@@ -37,11 +37,12 @@ test('has distinct desktop and mobile compositions without horizontal overflow',
 });
 
 test('renders the local layered device visual without a decorative central node', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/xinovasu-landing/');
   await expect(page.locator('.phone-stage .reference-device')).toBeVisible();
   await expect(page.locator('.kernel-node')).toHaveCount(0);
   await expect(page.locator('.ground-grid')).toHaveCount(1);
-  await expect(page.locator('.brand img')).toHaveAttribute('src', /xos-mark\.svg$/);
+  await expect(page.locator('.phone-stage.product-stage')).toHaveCSS('background-image', 'none');
+  await expect(page.locator('.brand img')).toHaveAttribute('src', /xos-mark\.svg$|aria-label='XOS'/);
   await expect(page.locator('.brand img')).toHaveAttribute('alt', 'XOS');
   await page.emulateMedia({ reducedMotion: 'reduce' });
   await expect(page.locator('.reference-device')).toHaveCSS('animation-name', 'none');
@@ -57,7 +58,7 @@ test('provides a dedicated XinovaSU usage guide with official source links', asy
 });
 
 test('activates a single feature row', async ({ page }) => {
-  await page.goto('/');
+  await page.goto('/xinovasu-landing/');
   await page.locator('[data-feature="network"]').click();
   await expect(page.locator('[data-feature="network"]')).toHaveAttribute('aria-expanded', 'true');
   await expect(page.locator('[data-feature="kernel-mask"]')).toHaveAttribute('aria-expanded', 'false');

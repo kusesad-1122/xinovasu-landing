@@ -7,6 +7,8 @@
   background: #fff;
 }
 
+.phone-stage.product-stage { background-image: none; }
+
 .ground-grid {
   position: absolute;
   z-index: 0;
