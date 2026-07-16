@@ -1,0 +1,27 @@
+.technology li {
+  grid-template-columns: 150px minmax(0, 1fr);
+  grid-template-rows: auto auto;
+  gap: 8px 20px;
+}
+
+.technology li::before {
+  grid-column: 1;
+  grid-row: 1;
+}
+
+.technology li > b {
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.technology li > span {
+  grid-column: 2;
+  grid-row: 2;
+  min-width: 0;
+}
+
+@media (max-width: 1023px) {
+  .technology li {
+    grid-template-columns: 48px minmax(0, 1fr);
+  }
+}
