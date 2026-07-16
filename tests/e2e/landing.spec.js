@@ -34,6 +34,14 @@ test('has distinct desktop and mobile compositions without horizontal overflow',
   await expect(page.locator('#mobile-menu')).toBeVisible();
   expect(await page.locator('body').evaluate((body) => body.scrollWidth <= window.innerWidth)).toBe(true);
   await expect(page.locator('.feature-row').first().locator('div').evaluate((element) => element.getBoundingClientRect().width)).resolves.toBeGreaterThanOrEqual(220);
+  const technologyItem = page.locator('.technology li').first();
+  const technologyLayout = await technologyItem.evaluate((item) => {
+    const title = item.querySelector('b').getBoundingClientRect();
+    const description = item.querySelector('span').getBoundingClientRect();
+    return { titleLeft: title.left, descriptionLeft: description.left, descriptionWidth: description.width };
+  });
+  expect(technologyLayout.descriptionLeft).toBeGreaterThanOrEqual(technologyLayout.titleLeft - 1);
+  expect(technologyLayout.descriptionWidth).toBeGreaterThanOrEqual(220);
 });
 
 test('renders the local layered device visual without a decorative central node', async ({ page }) => {
